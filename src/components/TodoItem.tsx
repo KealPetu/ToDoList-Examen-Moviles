@@ -9,6 +9,8 @@ import {
     Animated,
     PanResponder,
     Alert,
+    Platform,
+    ToastAndroid,
 } from "react-native";
 import { Todo } from "../models/Todo";
 
@@ -30,7 +32,7 @@ interface TodoItemProps {
     accentColor: string;
     onToggleComplete: (todo: Todo) => void;
     onEdit: (todo: Todo) => void;
-    onDelete: (id: string) => void;
+    onDelete: (id: string) => Promise<void>;
 }
 
 export function TodoItem({
@@ -89,7 +91,12 @@ export function TodoItem({
             {
                 text: "Eliminar",
                 style: "destructive",
-                onPress: () => onDelete(todo.id),
+                onPress: async () => {
+                    await onDelete(todo.id);
+                    if (Platform.OS === "android") {
+                        ToastAndroid.show("Tarea eliminada", ToastAndroid.SHORT);
+                    }
+                },
             },
         ]);
     };
@@ -144,6 +151,7 @@ export function TodoItem({
                 <TouchableOpacity
                     style={styles.content}
                     onPress={() => onEdit(todo)}
+                    onLongPress={handleDeletePress}
                     activeOpacity={0.7}
                 >
                     <Text
