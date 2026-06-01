@@ -1,6 +1,6 @@
 // repositories/MmkvTodoRepository.ts
 
-import { MMKV } from "react-native-mmkv";
+import { MMKV, createMMKV } from "react-native-mmkv";
 import { Todo } from "../models/Todo";
 import { ITodoRepository } from "./ITodoRepository";
 
@@ -44,7 +44,7 @@ export class MmkvTodoRepository implements ITodoRepository {
     private storage: MMKV;
 
     constructor() {
-        this.storage = new MMKV({ id: STORE_ID });
+        this.storage = createMMKV({ id: STORE_ID });
         log("INFO", "MMKV storage listo", { storeId: STORE_ID });
     }
 
@@ -165,7 +165,7 @@ export class MmkvTodoRepository implements ITodoRepository {
             }
 
             // 1. Borrar el documento
-            this.storage.delete(`todos:${id}`);
+            this.storage.remove(`todos:${id}`);
 
             // 2. Quitar del índice
             const ids = this.readIndex().filter((i) => i !== id);
