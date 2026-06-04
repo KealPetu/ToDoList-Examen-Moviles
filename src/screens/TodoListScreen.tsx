@@ -11,9 +11,9 @@ import {
     ActivityIndicator,
     RefreshControl,
     StatusBar,
-    SafeAreaView,
     Platform,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useStorage } from "../context/StorageContext";
 import { Todo } from "../models/Todo";
 import { TodoItem } from "../components/TodoItem";
@@ -121,15 +121,15 @@ export function TodoListScreen() {
     );
 
     const handleToggleComplete = useCallback(
-        (todo: Todo) => {
-            updateTodo(todo.id, { completed: !todo.completed });
+        async (todo: Todo) => {
+            await updateTodo(todo.id, { completed: !todo.completed });
         },
         [updateTodo]
     );
 
     const handleDelete = useCallback(
-        (id: string) => {
-            deleteTodo(id);
+        async (id: string) => {
+            await deleteTodo(id);
         },
         [deleteTodo]
     );
